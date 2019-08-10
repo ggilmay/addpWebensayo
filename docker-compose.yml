@@ -4,10 +4,8 @@ services:
     container_name: nginx-server
     image: nginx
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl
-      - certs:/etc/letsencrypt
-      - certs-data:/data/letsencrypt
+      - letsencrypt_certs:/etc/nginx/certs
+      - letsencrypt_www:/var/www/letsencrypt
     ports:
       - "80:80"
       - "443:443"
@@ -28,4 +26,14 @@ services:
       - ./data:/data/db
     ports:
       - "27017:27017"
+  letsencrypt:
+    image: my/letsencrypt
+    command: /bin/true
+    volumes:
+      - letsencrypt_certs:/etc/letsencrypt
+      - letsencrypt_www:/var/www/letsencrypt
+
+volumes:
+  letsencrypt_certs: ~
+  letsencrypt_www: ~
 
