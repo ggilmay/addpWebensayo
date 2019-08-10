@@ -4,8 +4,9 @@ services:
     container_name: nginx-server
     image: nginx
     volumes:
-      - ./certbot/conf:/etc/nginx/ssl
-      - ./certbot/data:/usr/share/nginx/html/letsencrypt
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl
+      - ./letsencrypt-site:/usr/share/nginx/html
     ports:
       - "80:80"
       - "443:443"
@@ -26,15 +27,3 @@ services:
       - ./data:/data/db
     ports:
       - "27017:27017"
-  certbot:
-    image: certbot/certbot:latest
-    command: cernanly --webroot --webroot-path=/usr/share/nginx/html/letsencrypt --email ggilmay@eafit.edu.co --agree-tos --no-eff-email -d bottled.ga
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/logs:/var/log/letsencrypt
-      - ./certbot/data:/usr/share/nginx/html/letsencrypt
-
-volumes:
-  letsencrypt_certs: ~
-  letsencrypt_www: ~
-
